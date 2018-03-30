@@ -1,27 +1,36 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class MainClas {
-    public static void main (String[] args)
+/**
+ * Главный класс приложения.
+ */
+final class Program
+{
+    /**
+     * Entry point приложения.
+     */
+    public static void main(String[] args)
     {
-        String url = "tcp://localhost:61616";
-        try(JmsProducer producer = new JmsProducer(url));
-            jmsConsumer comsumer = new JmsConsumer(url, "test.in");
+        String url = "tcp://localhost:61616"; // url коннектора брокера
+        try
         {
+            JmsProducer producer = new JmsProducer(url);
+            JmsConsumer consumer = new JmsConsumer(url, "test.in");
             producer.start();
-            comsumer.init();
+            consumer.init();
 
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            String lane;
-            while (!(line = reader.readLine().equalsIgnoreCase("stop")){
+            BufferedReader rdr = new BufferedReader(new InputStreamReader(System.in));
+            String line;
+            while (!(line = rdr.readLine()).equalsIgnoreCase("stop")) // для выхода нужно набрать в консоли stop
+            {
                 producer.send(line);
-        }
-            System.out.println("Bye");
+            }
+            System.out.println("Bye!");
         }
         catch (Throwable e)
         {
-            e.printStactTrace()
+            e.printStackTrace();
         }
     }
+
 }
