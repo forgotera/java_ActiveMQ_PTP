@@ -30,16 +30,17 @@ public class JmsConsumer implements MessageListener, AutoCloseable
 
     /**
      * Конструктор используется в случае, когда брокер не требует авторизации.
-     * Здесь я не стал добавлять вариант с авторизацией. Он показан в producer-е.
-     * Брокер ActiveMQ из коробки настроен на работу без авторизации.
      */
-    public JmsConsumer(String url, String queue)
+    JmsConsumer(String queue)
     {
-        _connectionFactory = new ActiveMQConnectionFactory(url);
+        _connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
         _queueName = queue;
     }
 
-
+    /**
+     * подобен аналогичному методу отправителя
+     * @throws JMSException
+     */
     public void init() throws JMSException
     {
         System.out.println("Init consumer...");
@@ -56,8 +57,8 @@ public class JmsConsumer implements MessageListener, AutoCloseable
     }
 
     /**
-     * Обработчик события появления сообщения в целевом объекте.
-     * Этот метод является частью реализации интерфейса MessageListener.
+     * Обработчик появления сообщения в обьекте
+     * реализация метода интерфейса MessageListener
      */
     public void onMessage(Message msg)
     {
@@ -75,13 +76,8 @@ public class JmsConsumer implements MessageListener, AutoCloseable
         else System.out.println("Received message: " + msg.getClass().getName());
     }
 
-    /**
-     * Метод закрывает созединения перед разрушением объекта.
-     * Этот метод является реализацией интерфейса Autoclosable,
-     * добавленого в Java7 и используемого в блоке try-with-resources.
-     */
-    public void close() throws Exception
-    {
+
+    public void close() {
         try
         {
             if (_session != null)

@@ -22,23 +22,29 @@ public class JmsProducer extends Thread implements AutoCloseable
     private boolean _active = true;
 
 
-    public JmsProducer(String url)
+   /** JmsProducer()
     {
-        this(url, null, null);
+        this( null, null);
     }
+*/
+    /**
+     *
+     */
 
-
-    public JmsProducer(String url, String user, String password)
+     JmsProducer()
     {
-        if (user != null && !user.isEmpty() && password != null)
-            _connectionFactory = new ActiveMQConnectionFactory(url, user, password);
-        else
-            _connectionFactory = new ActiveMQConnectionFactory(url);
+        _connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
 
         _messagesQueue = new PriorityBlockingQueue<String>();
     }
 
-
+    /**
+     * создается коннект с ActiveMQ
+     * открывается сессия
+     * задается описание очереди
+     * @return описание очереди
+     * @throws JMSException ошибка коннекта с activeMQ
+     */
     private MessageProducer init() throws JMSException
     {
         _connection = _connectionFactory.createConnection();
@@ -48,13 +54,22 @@ public class JmsProducer extends Thread implements AutoCloseable
         return _session.createProducer(dest);
     }
 
-
+    /**
+     * сообщение добавляется в очередь
+     * непосредственно отправка сообщения происходит в методе run
+     * @param line строка с сообщением
+     */
     public void send(String line)
     {
         _messagesQueue.add(line);
     }
 
-
+    /**
+     * Переопредееленный метод класса Thread
+     * многопоточность
+     * происходит инициализация отправителя ,
+     * оправка сообщений и очереди
+     */
     @Override
     public void run()
     {
@@ -67,7 +82,7 @@ public class JmsProducer extends Thread implements AutoCloseable
             {
                 try
                 {
-                    String text = null;
+                    String text;
                     while (_active && (text = _messagesQueue.poll()) != null)
                     {
                         Message msg = _session.createTextMessage(text);

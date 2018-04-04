@@ -11,11 +11,10 @@ final class Program
      */
     public static void main(String[] args)
     {
-        String url = "tcp://localhost:61616"; // url коннектора брокера
         try
         {
-            JmsProducer producer = new JmsProducer(url);
-            JmsConsumer consumer = new JmsConsumer(url, "test.in");
+            JmsProducer producer = new JmsProducer();
+            JmsConsumer consumer = new JmsConsumer( "test.in");
             producer.start();
             consumer.init();
 
