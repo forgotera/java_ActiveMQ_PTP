@@ -21,16 +21,6 @@ public class JmsProducer extends Thread implements AutoCloseable
     private Queue<String> _messagesQueue;
     private boolean _active = true;
 
-
-   /** JmsProducer()
-    {
-        this( null, null);
-    }
-*/
-    /**
-     *
-     */
-
      JmsProducer()
     {
         _connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnectionFactory.DEFAULT_BROKER_URL);

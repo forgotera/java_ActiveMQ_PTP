@@ -2,13 +2,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 /**
- * Главный класс приложения.
+ * при запуске n
+ * сообщени доходят с n раза
+ *  т.е n = 2(два процесса) - принимается каждое второе сообщение
+ *  в чем проблема не знаю
+ *  ссылаюсь на баги ActiveMQ
  */
-final class Program
+ class Program
 {
-    /**
-     * Entry point приложения.
-     */
     public static void main(String[] args)
     {
         try
